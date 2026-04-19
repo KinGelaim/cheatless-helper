@@ -1,6 +1,5 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Drawing;
 
@@ -11,7 +10,7 @@ internal sealed class TemplateMatchingFinder : IElementFinder
     private string _templatePath;
     private double _threshold;
 
-    public TemplateMatchingFinder(string templatePath, double threshold = 0.95)
+    public TemplateMatchingFinder(string templatePath, double threshold = 0.94)
     {
         _templatePath = templatePath;
         _threshold = threshold;
@@ -57,11 +56,11 @@ internal sealed class TemplateMatchingFinder : IElementFinder
 
             CvInvoke.MinMaxLoc(result, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
 
-            // maxLoc - это координаты верхнего левого угла найденного шаблона
-            Console.WriteLine($"Лучшее совпадение: {maxVal} в точке {maxLoc}");
-
             if (maxVal > _threshold)
             {
+                // maxLoc - это координаты верхнего левого угла найденного шаблона
+                Console.WriteLine($"Лучшее совпадение: {maxVal} в точке {maxLoc}");
+
                 // Отображение (опционально)
                 //CvInvoke.Imwrite("template_color.png", templateBgr);
                 //CvInvoke.Rectangle(sourceMat, new Rectangle(maxLoc, new Size(templateBgr.Width, templateBgr.Height)), new MCvScalar(0, 255, 0), 2);

@@ -8,12 +8,6 @@ namespace OverlootingAutoClick;
 
 public sealed class Program
 {
-    private static readonly ImageResource[] Resources =
-    [
-        ImageResource.ArrowNextLevel,
-        ImageResource.Chest
-    ];
-
     private static volatile bool _shouldStop = false;
 
     public static void Main()
@@ -64,19 +58,15 @@ public sealed class Program
         bmp.Dispose();
 
         // Поиск элементов по приоритетам
-        foreach (var resource in Resources)
+        foreach (var resource in ImagePaths.Resources)
         {
-            var finder = new TemplateMatchingFinder(ImagePaths.GetPath(resource));
+            var finder = new TemplateMatchingFinder(resource.Value);
             var elementPos = finder.FindElementBitmap(filePath);
 
             if (elementPos.HasValue)
             {
                 var clicker = new SendMessageExecutor();
                 clicker.ClickAt(elementPos.Value, hWnd);
-            }
-            else
-            {
-                Console.WriteLine("Элемент не найден");
             }
         }
 
