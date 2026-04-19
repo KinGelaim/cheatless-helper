@@ -1,3 +1,5 @@
+using Emgu.CV;
+using Emgu.CV.CvEnum;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -5,6 +7,7 @@ namespace OverlootingAutoClick;
 
 public sealed class Program
 {
+    // Импортируем необходимые функции WinAPI
     [DllImport("user32.dll")]
     private static extern bool SetCursorPos(int X, int Y);
 
@@ -16,43 +19,60 @@ public sealed class Program
 
     public static void Main()
     {
-        // Настройки: координаты точки для проверки и клика
-        var checkX = 1350;
-        var checkY = 1000;
-        var targetColor = Color.FromArgb(255, 0, 0);
+        // Параметры поиска
+        string templatePath = "Images/ArrowNextLevel.png"; // путь к изображению шаблона
+        double threshold = 0.8; // порог совпадения
 
-        // Получение информации о мониторе
-        var monitorBounds = new Rectangle(0, 0, 1920, 1080);
+        // Координаты и размеры монитора (заполняйте актуальными данными)
+        Rectangle monitorBounds = new Rectangle(0, 0, 1920, 1080);
 
-        // Захват изображения с монитора
-        var bmp = new Bitmap(monitorBounds.Width, monitorBounds.Height);
+        // Захват изображения монитора
+        Bitmap bmp = new Bitmap(monitorBounds.Width, monitorBounds.Height);
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.CopyFromScreen(monitorBounds.Location, Point.Empty, monitorBounds.Size);
         }
 
-        // Проверка пикселя
-        Color pixelColor = bmp.GetPixel(checkX - monitorBounds.X, checkY - monitorBounds.Y);
+        // Сохраняем скриншот для обработки
+        string screenshotPath = "temp_screenshot.png";
+        bmp.Save(screenshotPath);
 
-        Console.WriteLine($"Пиксель по координате ({checkX},{checkY}): {pixelColor}");
-
-        if (pixelColor.R == targetColor.R && pixelColor.G == targetColor.G && pixelColor.B == targetColor.B)
+        // Загружаем изображение скриншота и шаблон
+        using (Mat source = CvInvoke.Imread(screenshotPath))
+        using (Mat template = CvInvoke.Imread(templatePath))
         {
-            Console.WriteLine("Цвет совпал! Выполняю клик...");
+            using (Mat result = new Mat())
+            {
+                // Выполняем сопоставление шаблонов
+                CvInvoke.MatchTemplate(source, template, result, TemplateMatchingType.CcorrNormed);
 
-            // Перемещаем курсор
-            SetCursorPos(checkX, checkY);
+                // Ищем максимум
+                double minVal = 0, maxVal = 0;
+                Point minLoc = new Point(), maxLoc = new Point();
+                CvInvoke.MinMaxLoc(result, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
 
-            // Эмулируем клик
-            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
-            Thread.Sleep(50); // Мелкая задержка
-            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-            Console.WriteLine("Клик выполнен");
-        }
-        else
-        {
-            SetCursorPos(checkX, checkY);
-            Console.WriteLine("Цвет не совпал, клик не выполняется");
+                Console.WriteLine($"Сравнение: максимум = {maxVal}");
+
+                if (maxVal > threshold)
+                {
+                    // Находим центро шаблона (для клика)
+                    int clickX = maxLoc.X + template.Width / 2 + monitorBounds.X;
+                    int clickY = maxLoc.Y + template.Height / 2 + monitorBounds.Y;
+
+                    Console.WriteLine($"Обнаружена стрелка. Кликаю по ({clickX}, {clickY})...");
+
+                    // Перемещаем курсор и кликаем
+                    SetCursorPos(clickX, clickY);
+                    Thread.Sleep(100);
+                    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
+                    Thread.Sleep(50);
+                    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
+                }
+                else
+                {
+                    Console.WriteLine("Шаблон не найден или совпадение недостаточное.");
+                }
+            }
         }
     }
 }
