@@ -1,5 +1,6 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -14,14 +15,19 @@ public sealed class Program
     [DllImport("user32.dll")]
     private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
 
+    [DllImport("user32.dll")]
+    static extern bool SetForegroundWindow(IntPtr hWnd);
+
     private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
     private const uint MOUSEEVENTF_LEFTUP = 0x0004;
 
     public static void Main()
     {
+        ActivateProcess("Overlooting");
+
         // Параметры поиска
         string templatePath = "Images/ArrowNextLevel.png"; // путь к изображению шаблона
-        double threshold = 0.8; // порог совпадения
+        double threshold = 0.9; // порог совпадения
 
         // Координаты и размеры монитора (заполняйте актуальными данными)
         Rectangle monitorBounds = new Rectangle(0, 0, 1920, 1080);
@@ -73,6 +79,22 @@ public sealed class Program
                     Console.WriteLine("Шаблон не найден или совпадение недостаточное.");
                 }
             }
+        }
+    }
+
+    private static void ActivateProcess(string processName)
+    {
+        Process[] processes = Process.GetProcessesByName(processName);
+        if (processes.Length > 0)
+        {
+            Process proc = processes[0];
+            SetForegroundWindow(proc.MainWindowHandle);
+            Console.WriteLine($"Процесс {processName} активирован");
+            Thread.Sleep(500); // подождать, пока окно станет активным
+        }
+        else
+        {
+            Console.WriteLine($"Процесс {processName} не найден");
         }
     }
 }
