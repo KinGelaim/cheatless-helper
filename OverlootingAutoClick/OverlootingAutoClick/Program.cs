@@ -14,7 +14,30 @@ public sealed class Program
         ImageResource.Chest
     ];
 
+    private static volatile bool _shouldStop = false;
+
     public static void Main()
+    {
+        Console.CancelKeyPress += (sender, e) =>
+        {
+            _shouldStop = true;
+            e.Cancel = true;
+            Console.WriteLine("Получена команда на завершение. Дожидаемся завершения цикла...");
+        };
+
+        Console.WriteLine("Для завершения нажмите Ctrl+C");
+
+        while (!_shouldStop)
+        {
+            ScanResources();
+
+            Thread.Sleep(1000);
+        }
+
+        Console.WriteLine("Программа завершена");
+    }
+
+    private static void ScanResources()
     {
         // Найти окно
         var windowFinder = new ExactTitleWindowFinder("Overlooting");
