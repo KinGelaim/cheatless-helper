@@ -8,6 +8,12 @@ namespace OverlootingAutoClick;
 
 public sealed class Program
 {
+    private static readonly ImageResource[] Resources =
+    [
+        ImageResource.ArrowNextLevel,
+        ImageResource.Chest
+    ];
+
     public static void Main()
     {
         // Найти окно
@@ -34,18 +40,21 @@ public sealed class Program
         Console.WriteLine($"Изображение окна в фоне сохранено как '{filePath}'");
         bmp.Dispose();
 
-        // Поиск элемента
-        var finder = new TemplateMatchingFinder("Images/ArrowNextLevel.png", 0.9);
-        var elementPos = finder.FindElementBitmap(filePath);
+        // Поиск элементов по приоритетам
+        foreach (var resource in Resources)
+        {
+            var finder = new TemplateMatchingFinder(ImagePaths.GetPath(resource));
+            var elementPos = finder.FindElementBitmap(filePath);
 
-        if (elementPos.HasValue)
-        {
-            var clicker = new SendMessageExecutor();
-            clicker.ClickAt(elementPos.Value, hWnd);
-        }
-        else
-        {
-            Console.WriteLine("Элемент не найден");
+            if (elementPos.HasValue)
+            {
+                var clicker = new SendMessageExecutor();
+                clicker.ClickAt(elementPos.Value, hWnd);
+            }
+            else
+            {
+                Console.WriteLine("Элемент не найден");
+            }
         }
 
         // В конце избавляемся от изображения экрана
