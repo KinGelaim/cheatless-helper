@@ -15,7 +15,9 @@ internal static class ImagePaths
         { ImageResource.Heart, "Images/Heart.png" },
         { ImageResource.WaterWellEnter, "Images/WaterWellEnter.png" },
         { ImageResource.WaterWellExit, "Images/WaterWellExit.png" },
-        { ImageResource.Mannequin, "Images/Mannequin.png" },
+        { ImageResource.MannequinEnter, "Images/MannequinEnter.png" },
+        { ImageResource.MannequinExit, "Images/MannequinExit.png" },
+        { ImageResource.HeroRemains, "Images/HeroRemains.png" },
 
         { ImageResource.Slime, "Images/Enemies/Slime.png" },
         { ImageResource.Rabbit, "Images/Enemies/Rabbit.png" },
@@ -42,9 +44,23 @@ internal static class ImagePaths
         { ImageResource.SaurianMandragora, "Images/Enemies/SaurianMandragora.png" },
         { ImageResource.VargoTrapVenus, "Images/Enemies/VargoTrapVenus.png" },
 
+        { ImageResource.CoreFragment, "Images/Enemies/CoreFragment.png" },
+        { ImageResource.CoreBeast, "Images/Enemies/CoreBeast.png" },
+        { ImageResource.DefiledBerserker, "Images/Enemies/DefiledBerserker.png" },
+        { ImageResource.DefiledPriest, "Images/Enemies/DefiledPriest.png" },
+        { ImageResource.DefiledGuardian, "Images/Enemies/DefiledGuardian.png" },
+        { ImageResource.CoreHomunculus, "Images/Enemies/CoreHomunculus.png" },
+        { ImageResource.DefiledHermit, "Images/Enemies/DefiledHermit.png" },
+        { ImageResource.CoreEnchanter, "Images/Enemies/CoreEnchanter.png" },
+        { ImageResource.CoreDefender, "Images/Enemies/CoreDefender.png" },
+        { ImageResource.CoreSpear, "Images/Enemies/CoreSpear.png" },
+        { ImageResource.CoreSphere, "Images/Enemies/CoreSphere.png" },
+
         { ImageResource.SlimeMother, "Images/Bosses/SlimeMother.png" },
         { ImageResource.RedDragon, "Images/Bosses/RedDragon.png" },
         { ImageResource.GreenDragon, "Images/Bosses/GreenDragon.png" },
+        { ImageResource.RottenCoreMessenger, "Images/Bosses/RottenCoreMessenger.png" },
+        { ImageResource.WoundedCoreMessenger, "Images/Bosses/WoundedCoreMessenger.png" },
         { ImageResource.FilthProphet, "Images/Bosses/FilthProphet.png" }
     };
 
@@ -72,7 +88,9 @@ internal enum ImageResource
     Heart,
     WaterWellEnter,
     WaterWellExit,
-    Mannequin,
+    MannequinEnter,
+    MannequinExit,
+    HeroRemains,
 
     Slime,
     Rabbit,
@@ -99,8 +117,22 @@ internal enum ImageResource
     SaurianMandragora,
     VargoTrapVenus,
 
+    CoreFragment,
+    CoreBeast,
+    DefiledBerserker,
+    DefiledPriest,
+    DefiledGuardian,
+    CoreHomunculus,
+    DefiledHermit,
+    CoreEnchanter,
+    CoreDefender,
+    CoreSpear,
+    CoreSphere,
+
     SlimeMother,
     RedDragon,
     GreenDragon,
+    RottenCoreMessenger,
+    WoundedCoreMessenger,
     FilthProphet
 }
