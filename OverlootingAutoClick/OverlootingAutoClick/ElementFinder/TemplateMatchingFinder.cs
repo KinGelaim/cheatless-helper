@@ -1,28 +1,22 @@
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
+using OverlootingAutoClick.Resources;
 using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
 internal sealed class TemplateMatchingFinder : IElementFinder
 {
-    private string _templatePath;
-    private double _threshold;
+    private readonly double _threshold = 0.94;
 
-    public TemplateMatchingFinder(string templatePath, double threshold = 0.94)
-    {
-        _templatePath = templatePath;
-        _threshold = threshold;
-    }
-
-    public Point? FindElementBitmap(string windowImagePath)
+    public Point? FindElementBitmap(string windowImagePath, ResourceInfo resource)
     {
         // 1. Загружаем изображения
         using var sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
-        using var templateMat = CvInvoke.Imread(_templatePath, ImreadModes.Unchanged);
+        var templateMat = resource.ImageMat;
 
-        if (sourceMat.IsEmpty || templateMat.IsEmpty)
+        if (sourceMat.IsEmpty || templateMat is null || templateMat.IsEmpty)
         {
             Console.WriteLine("Ошибка при загрузке изображений. Проверьте пути к файлам.");
             return null;
@@ -44,34 +38,31 @@ internal sealed class TemplateMatchingFinder : IElementFinder
         int resultCols = sourceMat.Cols - templateBgr.Cols + 1;
         int resultRows = sourceMat.Rows - templateBgr.Rows + 1;
 
-        using (Mat result = new Mat(resultRows, resultCols, DepthType.Cv32F, 1))
+        using var result = new Mat(resultRows, resultCols, DepthType.Cv32F, 1);
+        // Выполняем сопоставление шаблонов
+        CvInvoke.MatchTemplate(sourceMat, templateBgr, result, TemplateMatchingType.CcorrNormed, alphaMask);
+
+        // Находим максимум (лучшее совпадение)
+        double minVal = 0, maxVal = 0;
+        Point minLoc = new(), maxLoc = new();
+
+        CvInvoke.MinMaxLoc(result, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+
+        if (maxVal > _threshold)
         {
-            // Выполняем сопоставление шаблонов
-            CvInvoke.MatchTemplate(sourceMat, templateBgr, result, TemplateMatchingType.CcorrNormed, alphaMask);
+            // maxLoc - это координаты верхнего левого угла найденного шаблона
+            Console.WriteLine($"Лучшее совпадение: {resource.Name} {maxVal} в точке {maxLoc}");
 
-            // Находим максимум (лучшее совпадение)
-            double minVal = 0, maxVal = 0;
-            Point minLoc = new();
-            Point maxLoc = new();
+            // Отображение (опционально)
+            //CvInvoke.Imwrite("template_color.png", templateBgr);
+            //CvInvoke.Rectangle(sourceMat, new Rectangle(maxLoc, new Size(templateBgr.Width, templateBgr.Height)), new MCvScalar(0, 255, 0), 2);
+            //CvInvoke.Imshow("Result", sourceMat);
+            //CvInvoke.WaitKey(0);
 
-            CvInvoke.MinMaxLoc(result, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
-
-            if (maxVal > _threshold)
-            {
-                // maxLoc - это координаты верхнего левого угла найденного шаблона
-                Console.WriteLine($"Лучшее совпадение: {maxVal} в точке {maxLoc}");
-
-                // Отображение (опционально)
-                //CvInvoke.Imwrite("template_color.png", templateBgr);
-                //CvInvoke.Rectangle(sourceMat, new Rectangle(maxLoc, new Size(templateBgr.Width, templateBgr.Height)), new MCvScalar(0, 255, 0), 2);
-                //CvInvoke.Imshow("Result", sourceMat);
-                //CvInvoke.WaitKey(0);
-
-                var clickX = maxLoc.X + templateMat.Width / 2;
-                var clickY = maxLoc.Y + templateMat.Height / 2;
-                return new Point(clickX, clickY);
-            }
-            return null;
+            var clickX = maxLoc.X + templateMat.Width / 2;
+            var clickY = maxLoc.Y + templateMat.Height / 2;
+            return new Point(clickX, clickY);
         }
+        return null;
     }
 }

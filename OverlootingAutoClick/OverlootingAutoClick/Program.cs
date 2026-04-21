@@ -1,5 +1,6 @@
 using OverlootingAutoClick.ClickExecutor;
 using OverlootingAutoClick.ElementFinder;
+using OverlootingAutoClick.Resources;
 using OverlootingAutoClick.Utils;
 using OverlootingAutoClick.WindowCapture;
 using OverlootingAutoClick.WindowFinder;
@@ -21,9 +22,10 @@ public sealed class Program
 
         Console.WriteLine("Для завершения нажмите Ctrl+C");
 
+        var resourceContainer = new ResourceContainer();
         while (!_shouldStop)
         {
-            ScanResources();
+            ScanResources(resourceContainer);
 
             Thread.Sleep(1000);
         }
@@ -31,7 +33,7 @@ public sealed class Program
         Console.WriteLine("Программа завершена");
     }
 
-    private static void ScanResources()
+    private static void ScanResources(ResourceContainer resourceContainer)
     {
         // Найти окно
         var windowFinder = new ExactTitleWindowFinder("Overlooting");
@@ -58,10 +60,10 @@ public sealed class Program
         bmp.Dispose();
 
         // Поиск элементов по приоритетам
-        foreach (var resource in ImagePaths.Resources)
+        foreach (var resource in resourceContainer.GetResources())
         {
-            var finder = new TemplateMatchingFinder(resource.Value);
-            var elementPos = finder.FindElementBitmap(filePath);
+            var finder = new TemplateMatchingFinder();
+            var elementPos = finder.FindElementBitmap(filePath, resource);
 
             if (elementPos.HasValue)
             {

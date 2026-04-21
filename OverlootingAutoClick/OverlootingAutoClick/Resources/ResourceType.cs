@@ -1,0 +1,65 @@
+namespace OverlootingAutoClick.Resources;
+
+internal enum ResourceType
+{
+    ArrowNextLevel,
+
+    WoodenChest,
+    GoldenChest,
+    NecromancerChest,
+
+    BlacksmithEnter,
+    BlacksmithExit,
+    Heart,
+    WaterWellEnter,
+    WaterWellExit,
+    MannequinEnter,
+    MannequinExit,
+    HeroRemains,
+
+    Slime,
+    Rabbit,
+    ForestKiller,
+    Snake,
+    ForestWarrior,
+    Bee,
+    ForestDruid,
+    ForestBully,
+    Amalgam,
+    Cobra,
+    Shark,
+
+    DogTrapVenus,
+    StrangeRaven,
+    Mandragora,
+    EvilMandragora,
+    CreepingMandragora,
+    StrangeReptile,
+    Mushroom,
+    MushroomFamily,
+    WolfTrapVenus,
+    StrangeRhino,
+    SaurianMandragora,
+    VargoTrapVenus,
+
+    CoreFragment,
+    CoreBeast,
+    DefiledBerserker,
+    DefiledPriest,
+    DefiledGuardian,
+    CoreHomunculus,
+    DefiledHermit,
+    CoreEnchanter,
+    CoreDefender,
+    CoreSpear,
+    CoreSphere,
+
+    SlimeMother,
+    Chimera,
+    Manticore,
+    RedDragon,
+    GreenDragon,
+    RottenCoreMessenger,
+    WoundedCoreMessenger,
+    FilthProphet
+}
