@@ -40,7 +40,7 @@ internal static class ImagePaths
         { ImageResource.Mushroom, "Images/Enemies/Mushroom.png" },
         { ImageResource.MushroomFamily, "Images/Enemies/MushroomFamily.png" },
         { ImageResource.WolfTrapVenus, "Images/Enemies/WolfTrapVenus.png" },
-        { ImageResource.WolfTrapVenus, "Images/Enemies/StrangeRhino.png" },
+        { ImageResource.StrangeRhino, "Images/Enemies/StrangeRhino.png" },
         { ImageResource.SaurianMandragora, "Images/Enemies/SaurianMandragora.png" },
         { ImageResource.VargoTrapVenus, "Images/Enemies/VargoTrapVenus.png" },
 
