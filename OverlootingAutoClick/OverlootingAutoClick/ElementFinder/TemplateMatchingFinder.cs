@@ -6,24 +6,27 @@ using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
-internal sealed class TemplateMatchingFinder : IElementFinder
+internal sealed class TemplateMatchingFinder : IElementFinder, IDisposable
 {
     private readonly double _threshold = 0.94;
+    private readonly Mat _sourceMat;
 
-    public Point? FindElementBitmap(string windowImagePath, ResourceInfo resource)
+    public TemplateMatchingFinder(string windowImagePath) =>
+        _sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
+
+    public Point? FindElementBitmap(ResourceInfo resource)
     {
         // 1. Загружаем изображения
-        using var sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
         var templateMat = resource.ImageMat;
 
-        if (sourceMat.IsEmpty || templateMat is null || templateMat.IsEmpty)
+        if (_sourceMat.IsEmpty || templateMat is null || templateMat.IsEmpty)
         {
             Console.WriteLine("Ошибка при загрузке изображений. Проверьте пути к файлам.");
             return null;
         }
 
         // Получаем альфа-канал
-        VectorOfMat channels = new VectorOfMat();
+        var channels = new VectorOfMat();
         CvInvoke.Split(templateMat, channels);
         Mat alphaMask = channels[3];
 
@@ -31,16 +34,16 @@ internal sealed class TemplateMatchingFinder : IElementFinder
         CvInvoke.Threshold(alphaMask, alphaMask, 0, 255, ThresholdType.Binary);
 
         // Преобразуем шаблон к 3 каналам, если у бэкграунда нет альфы
-        Mat templateBgr = new Mat();
+        var templateBgr = new Mat();
         CvInvoke.CvtColor(templateMat, templateBgr, ColorConversion.Bgra2Bgr);
 
         // Создаем матрицу для результата
-        int resultCols = sourceMat.Cols - templateBgr.Cols + 1;
-        int resultRows = sourceMat.Rows - templateBgr.Rows + 1;
+        int resultCols = _sourceMat.Cols - templateBgr.Cols + 1;
+        int resultRows = _sourceMat.Rows - templateBgr.Rows + 1;
 
         using var result = new Mat(resultRows, resultCols, DepthType.Cv32F, 1);
         // Выполняем сопоставление шаблонов
-        CvInvoke.MatchTemplate(sourceMat, templateBgr, result, TemplateMatchingType.CcorrNormed, alphaMask);
+        CvInvoke.MatchTemplate(_sourceMat, templateBgr, result, TemplateMatchingType.CcorrNormed, alphaMask);
 
         // Находим максимум (лучшее совпадение)
         double minVal = 0, maxVal = 0;
@@ -65,4 +68,6 @@ internal sealed class TemplateMatchingFinder : IElementFinder
         }
         return null;
     }
+
+    public void Dispose() => _sourceMat.Dispose();
 }

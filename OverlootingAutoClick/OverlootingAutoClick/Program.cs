@@ -60,10 +60,10 @@ public sealed class Program
         bmp.Dispose();
 
         // Поиск элементов по приоритетам
+        using var finder = new TemplateMatchingFinder(filePath);
         foreach (var resource in resourceContainer.GetResources())
         {
-            var finder = new TemplateMatchingFinder();
-            var elementPos = finder.FindElementBitmap(filePath, resource);
+            var elementPos = finder.FindElementBitmap(resource);
 
             if (elementPos.HasValue)
             {
@@ -71,6 +71,7 @@ public sealed class Program
                 clicker.ClickAt(elementPos.Value, hWnd);
             }
         }
+        finder.Dispose();
 
         // В конце избавляемся от изображения экрана
         imageStorage.DeleteFile(filePath);
