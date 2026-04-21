@@ -15,6 +15,7 @@ internal static class ImagePaths
         { ImageResource.Heart, "Images/Heart.png" },
         { ImageResource.WaterWellEnter, "Images/WaterWellEnter.png" },
         { ImageResource.WaterWellExit, "Images/WaterWellExit.png" },
+        { ImageResource.Mannequin, "Images/Mannequin.png" },
 
         { ImageResource.Slime, "Images/Enemies/Slime.png" },
         { ImageResource.Rabbit, "Images/Enemies/Rabbit.png" },
@@ -28,7 +29,22 @@ internal static class ImagePaths
         { ImageResource.Cobra, "Images/Enemies/Cobra.png" },
         { ImageResource.Shark, "Images/Enemies/Shark.png" },
 
+        { ImageResource.DogTrapVenus, "Images/Enemies/DogTrapVenus.png" },
+        { ImageResource.StrangeRaven, "Images/Enemies/StrangeRaven.png" },
+        { ImageResource.Mandragora, "Images/Enemies/Mandragora.png" },
+        { ImageResource.EvilMandragora, "Images/Enemies/EvilMandragora.png" },
+        { ImageResource.CreepingMandragora, "Images/Enemies/CreepingMandragora.png" },
+        { ImageResource.StrangeReptile, "Images/Enemies/StrangeReptile.png" },
+        { ImageResource.Mushroom, "Images/Enemies/Mushroom.png" },
+        { ImageResource.MushroomFamily, "Images/Enemies/MushroomFamily.png" },
+        { ImageResource.WolfTrapVenus, "Images/Enemies/WolfTrapVenus.png" },
+        { ImageResource.WolfTrapVenus, "Images/Enemies/StrangeRhino.png" },
+        { ImageResource.SaurianMandragora, "Images/Enemies/SaurianMandragora.png" },
+        { ImageResource.VargoTrapVenus, "Images/Enemies/VargoTrapVenus.png" },
+
         { ImageResource.SlimeMother, "Images/Bosses/SlimeMother.png" },
+        { ImageResource.RedDragon, "Images/Bosses/RedDragon.png" },
+        { ImageResource.GreenDragon, "Images/Bosses/GreenDragon.png" },
         { ImageResource.FilthProphet, "Images/Bosses/FilthProphet.png" }
     };
 
@@ -56,6 +72,7 @@ internal enum ImageResource
     Heart,
     WaterWellEnter,
     WaterWellExit,
+    Mannequin,
 
     Slime,
     Rabbit,
@@ -69,6 +86,21 @@ internal enum ImageResource
     Cobra,
     Shark,
 
+    DogTrapVenus,
+    StrangeRaven,
+    Mandragora,
+    EvilMandragora,
+    CreepingMandragora,
+    StrangeReptile,
+    Mushroom,
+    MushroomFamily,
+    WolfTrapVenus,
+    StrangeRhino,
+    SaurianMandragora,
+    VargoTrapVenus,
+
     SlimeMother,
+    RedDragon,
+    GreenDragon,
     FilthProphet
 }
