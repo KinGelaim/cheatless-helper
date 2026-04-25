@@ -59,15 +59,12 @@ public sealed class Program
             return;
         }
 
-        // Сохранить изображение
-        var imageStorage = new ImageStorage();
-        var filePath = imageStorage.SaveToTempFile(bmp);
-        Console.WriteLine($"Изображение окна в фоне сохранено как '{filePath}'");
+        // Преобразование изображения
+        using var finder = new TemplateMatchingFinder(bmp);
         bmp.Dispose();
 
         // Поиск элементов по приоритетам
         var points = new List<Point>();
-        using var finder = new TemplateMatchingFinder(filePath);
         Parallel.ForEach(
             resourceContainer.GetResources(),
             new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 3 },
@@ -80,15 +77,14 @@ public sealed class Program
                     points.Add(elementPos.Value);
                 }
             });
+        finder.Dispose();
+
+        // Осуществляем клики по найденным элементам
         foreach (var point in points)
         {
             var clicker = new SendMessageExecutor();
             clicker.ClickAt(point, hWnd);
             Thread.Sleep(100);
         }
-        finder.Dispose();
-
-        // В конце избавляемся от изображения экрана
-        imageStorage.DeleteFile(filePath);
     }
 }

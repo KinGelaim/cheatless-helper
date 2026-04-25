@@ -2,14 +2,15 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using OverlootingAutoClick.Resources;
+using OverlootingAutoClick.Utils;
 using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
-internal sealed class TemplateMatchingFinder(string windowImagePath) : IElementFinder, IDisposable
+internal sealed class TemplateMatchingFinder(Bitmap windowImage) : IElementFinder, IDisposable
 {
     private readonly double _threshold = 0.94;
-    private readonly Mat _sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
+    private readonly Mat _sourceMat = BitmapConverter.BitmapToMatNoAlpha(windowImage);
 
     public Point? FindElementBitmap(ResourceInfo resource)
     {
