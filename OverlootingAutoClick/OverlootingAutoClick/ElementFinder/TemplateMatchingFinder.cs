@@ -9,13 +9,12 @@ namespace OverlootingAutoClick.ElementFinder;
 
 internal sealed class TemplateMatchingFinder(Bitmap windowImage) : IElementFinder, IDisposable
 {
-    private readonly double _threshold = 0.94;
     private readonly Mat _sourceMat = BitmapConverter.BitmapToMatNoAlpha(windowImage);
 
-    public Point? FindElementBitmap(ResourceInfo resource)
+    public Point? FindElementBitmap(ResourceInfo resourceInfo)
     {
         // 1. Загружаем изображения
-        var templateMat = resource.ImageMat;
+        var templateMat = resourceInfo.ImageMat;
 
         if (_sourceMat.IsEmpty || templateMat is null || templateMat.IsEmpty)
         {
@@ -51,10 +50,10 @@ internal sealed class TemplateMatchingFinder(Bitmap windowImage) : IElementFinde
 
         //Console.WriteLine($"Лучшее совпадение: {resource.Name} {maxVal} в точке {maxLoc}");
 
-        if (maxVal > _threshold)
+        if (maxVal > resourceInfo.Threshold)
         {
             // maxLoc - это координаты верхнего левого угла найденного шаблона
-            Console.WriteLine($"Лучшее совпадение: {resource.Name} {maxVal} в точке {maxLoc}");
+            Console.WriteLine($"Лучшее совпадение: {resourceInfo.Name} {maxVal} в точке {maxLoc}");
 
             // Отображение (опционально)
             //CvInvoke.Imwrite("template_color.png", templateBgr);

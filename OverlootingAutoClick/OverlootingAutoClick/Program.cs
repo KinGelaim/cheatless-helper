@@ -1,7 +1,6 @@
 using OverlootingAutoClick.ClickExecutor;
 using OverlootingAutoClick.ElementFinder;
 using OverlootingAutoClick.Resources;
-using OverlootingAutoClick.Utils;
 using OverlootingAutoClick.WindowCapture;
 using OverlootingAutoClick.WindowFinder;
 using System.Diagnostics;
