@@ -6,13 +6,10 @@ using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
-internal sealed class TemplateMatchingFinder : IElementFinder, IDisposable
+internal sealed class TemplateMatchingFinder(string windowImagePath) : IElementFinder, IDisposable
 {
     private readonly double _threshold = 0.94;
-    private readonly Mat _sourceMat;
-
-    public TemplateMatchingFinder(string windowImagePath) =>
-        _sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
+    private readonly Mat _sourceMat = CvInvoke.Imread(windowImagePath, ImreadModes.AnyColor);
 
     public Point? FindElementBitmap(ResourceInfo resource)
     {
@@ -50,6 +47,8 @@ internal sealed class TemplateMatchingFinder : IElementFinder, IDisposable
         Point minLoc = new(), maxLoc = new();
 
         CvInvoke.MinMaxLoc(result, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+
+        //Console.WriteLine($"Лучшее совпадение: {resource.Name} {maxVal} в точке {maxLoc}");
 
         if (maxVal > _threshold)
         {

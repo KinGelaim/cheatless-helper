@@ -4,6 +4,8 @@ using OverlootingAutoClick.Resources;
 using OverlootingAutoClick.Utils;
 using OverlootingAutoClick.WindowCapture;
 using OverlootingAutoClick.WindowFinder;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace OverlootingAutoClick;
 
@@ -22,10 +24,14 @@ public sealed class Program
 
         Console.WriteLine("Для завершения нажмите Ctrl+C");
 
+        var stopwatch = new Stopwatch();
         var resourceContainer = new ResourceContainer();
         while (!_shouldStop)
         {
+            stopwatch.Restart();
             ScanResources(resourceContainer);
+            stopwatch.Stop();
+            Console.WriteLine($"Время сканирования ресурсов: {stopwatch.ElapsedMilliseconds}");
 
             Thread.Sleep(1000);
         }
@@ -60,16 +66,25 @@ public sealed class Program
         bmp.Dispose();
 
         // Поиск элементов по приоритетам
+        var points = new List<Point>();
         using var finder = new TemplateMatchingFinder(filePath);
-        foreach (var resource in resourceContainer.GetResources())
-        {
-            var elementPos = finder.FindElementBitmap(resource);
-
-            if (elementPos.HasValue)
+        Parallel.ForEach(
+            resourceContainer.GetResources(),
+            new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 3 },
+            resource =>
             {
-                var clicker = new SendMessageExecutor();
-                clicker.ClickAt(elementPos.Value, hWnd);
-            }
+                var elementPos = finder.FindElementBitmap(resource);
+
+                if (elementPos.HasValue)
+                {
+                    points.Add(elementPos.Value);
+                }
+            });
+        foreach (var point in points)
+        {
+            var clicker = new SendMessageExecutor();
+            clicker.ClickAt(point, hWnd);
+            Thread.Sleep(100);
         }
         finder.Dispose();
 
