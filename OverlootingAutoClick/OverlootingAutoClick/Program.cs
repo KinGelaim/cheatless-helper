@@ -1,3 +1,5 @@
+using Emgu.CV;
+using Emgu.CV.Structure;
 using OverlootingAutoClick.ClickExecutor;
 using OverlootingAutoClick.ElementFinder;
 using OverlootingAutoClick.Resources;
@@ -55,6 +57,15 @@ public sealed class Program
         if (bmp is null)
         {
             Console.WriteLine("Не удалось захватить изображение");
+            return;
+        }
+
+        // Проверяем, что не захватили переходное изображение
+        var img = bmp.ToImage<Bgr, byte>();
+        var averageColor = img.GetAverage();
+        if (averageColor.Blue < 1 && averageColor.Green < 1 && averageColor.Red < 1)
+        {
+            Console.WriteLine($"Захватили переходное изображение: {averageColor}");
             return;
         }
 
