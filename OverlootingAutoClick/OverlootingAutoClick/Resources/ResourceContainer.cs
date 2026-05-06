@@ -13,14 +13,19 @@ internal sealed class ResourceContainer : IDisposable
         new("Золотой сундук", "Images/Chests/Golden.png"),
         new("Некроманский сундук", "Images/Chests/Necromancer.png"),
 
-        new("Кузнец (вход)", "Images/BlacksmithEnter.png"),
+        new("Кузнец (вход) 1", "Images/BlacksmithEnterFirst.png"),
+        new("Кузнец (вход) 2", "Images/BlacksmithEnterSecond.png"),
+        new("Кузнец (вход) 3", "Images/BlacksmithEnterThird.png"),
         new("Кузнец (выход)", "Images/BlacksmithExit.png"),
         new("Сердце (святилище)", "Images/Heart.png"),
         new("Колодец (вход)", "Images/WaterWellEnter.png"),
         new("Колодец (выход)", "Images/WaterWellExit.png"),
         new("Маникен (вход)", "Images/MannequinEnter.png"),
         new("Маникен (выход)", "Images/MannequinExit.png"),
+        new("Перекрёсток (вход)", "Images/CrossroadEnter.png"),
+        new("Перекрёсток (выход)", "Images/CrossroadExit.png"),
         new("Остатки героя", "Images/HeroRemains.png"),
+        new("Конец уровня", "Images/LevelEnd.png"),
 
         new("Слизь", "Images/Enemies/Slime.png"),
         new("Кролик", "Images/Enemies/Rabbit.png"),
@@ -44,7 +49,7 @@ internal sealed class ResourceContainer : IDisposable
         new("Семья грибочков", "Images/Enemies/MushroomFamily.png"),
         new("Венерена волколовка", "Images/Enemies/WolfTrapVenus.png"),
         new("Странный носорог", "Images/Enemies/StrangeRhino.png"),
-        new("Сауриан мандрагора", "Images/Enemies/SaurianMandragora.png"),
+        new("Саурианская мандрагора", "Images/Enemies/SaurianMandragora.png"),
         new("Венерена варголовка", "Images/Enemies/VargoTrapVenus.png"),
 
         new("Фрагмент ядра", "Images/Enemies/CoreFragment.png"),
@@ -60,11 +65,22 @@ internal sealed class ResourceContainer : IDisposable
         new("Сфера ядра", "Images/Enemies/CoreSphere.png"),
 
         new("Мать слизней", "Images/Bosses/SlimeMother.png"),
+        new("Химера", "Images/Bosses/Chimera.png"),
+        new("Мантикора", "Images/Bosses/Manticore.png"),
         new("Красный дракон", "Images/Bosses/RedDragon.png"),
         new("Зелёный дракон", "Images/Bosses/GreenDragon.png"),
+        new("Владыка леса", "Images/Bosses/ForestLord.png"),
+        new("Саженец", "Images/Bosses/Seedling.png"),
+        new("Венерина гигантоловка", "Images/Bosses/GiantTrapVenus.png"),
+        new("Венерина троллеловка", "Images/Bosses/TrollTrapVenus.png"),
+        new("Венерина драконоловка", "Images/Bosses/DragonTrapVenus.png"),
+        new("Осквернённый цветок", "Images/Bosses/DefiledFlower.png"),
+        new("Семя скверны", "Images/Bosses/DefilementSeed.png"),
         new("Гнилой посланник ядра", "Images/Bosses/RottenCoreMessenger.png"),
         new("Раненый посланник ядра", "Images/Bosses/WoundedCoreMessenger.png"),
-        new("Мерзкий пророк", "Images/Bosses/FilthProphet.png")
+        new("Мерзкий пророк", "Images/Bosses/FilthProphet.png"),
+        new("Аватар скверны", "Images/Bosses/CorruptionAvatar.png"),
+        new("Величие", "Images/Bosses/Greatness.png")
     ];
 
     public IEnumerable<ResourceInfo> GetResources()
