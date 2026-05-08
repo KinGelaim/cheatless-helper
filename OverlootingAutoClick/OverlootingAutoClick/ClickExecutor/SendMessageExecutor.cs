@@ -6,7 +6,7 @@ namespace OverlootingAutoClick.ClickExecutor;
 internal sealed partial class SendMessageExecutor : ClickExecutorBase
 {
     // WinAPI для отправки сообщения в окно
-    [LibraryImport("user32.dll")]
+    [LibraryImport("user32.dll", EntryPoint = "SendMessageW")]
     private static partial IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
     private const uint WM_LBUTTONDOWN = 0x0201;
