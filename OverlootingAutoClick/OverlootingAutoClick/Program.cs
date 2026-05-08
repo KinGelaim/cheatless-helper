@@ -10,7 +10,7 @@ using System.Drawing;
 
 namespace OverlootingAutoClick;
 
-public sealed class Program
+internal sealed class Program
 {
     private static volatile bool _shouldStop = false;
 

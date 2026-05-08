@@ -6,13 +6,15 @@ namespace OverlootingAutoClick.WindowCapture;
 /// <summary>
 /// Захват изображения окна через Api windows
 /// </summary>
-internal sealed class WindowsApiCapture : IWindowCapture
+internal sealed partial class WindowsApiCapture : IWindowCapture
 {
-    [DllImport("user32.dll")]
-    private static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcB, uint nFlags);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool PrintWindow(IntPtr hwnd, IntPtr hdcB, uint nFlags);
 
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool GetWindowRect(IntPtr hWnd, out RECT rect);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT

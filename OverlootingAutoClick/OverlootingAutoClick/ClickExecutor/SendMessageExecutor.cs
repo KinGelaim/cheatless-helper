@@ -3,11 +3,11 @@ using System.Runtime.InteropServices;
 
 namespace OverlootingAutoClick.ClickExecutor;
 
-internal sealed class SendMessageExecutor : ClickExecutorBase
+internal sealed partial class SendMessageExecutor : ClickExecutorBase
 {
     // WinAPI для отправки сообщения в окно
-    [DllImport("user32.dll")]
-    private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+    [LibraryImport("user32.dll")]
+    private static partial IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
     private const uint WM_LBUTTONDOWN = 0x0201;
     private const uint WM_LBUTTONUP = 0x0202;

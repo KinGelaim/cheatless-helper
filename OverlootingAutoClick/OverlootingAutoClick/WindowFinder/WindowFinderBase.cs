@@ -5,15 +5,17 @@ namespace OverlootingAutoClick.WindowFinder;
 /// <summary>
 /// Базовый класс для поиска окна Windows
 /// </summary>
-internal abstract class WindowFinderBase : IWindowFinder
+internal abstract partial class WindowFinderBase : IWindowFinder
 {
-    [DllImport("user32.dll")]
-    protected static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    protected static partial bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
 
-    [DllImport("user32.dll")]
-    protected static extern bool IsWindowVisible(IntPtr hWnd);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    protected static partial bool IsWindowVisible(IntPtr hWnd);
 
-    [DllImport("user32.dll")]
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     protected static extern int GetWindowText(IntPtr hWnd, System.Text.StringBuilder text, int maxLength);
 
     protected delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);

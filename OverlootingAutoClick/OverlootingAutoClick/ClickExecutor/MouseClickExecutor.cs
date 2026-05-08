@@ -6,15 +6,16 @@ namespace OverlootingAutoClick.ClickExecutor;
 /// <summary>
 /// Клик мышью через смещение положения курсора и эмуляцию клика
 /// </summary>
-internal sealed class MouseClickExecutor : ClickExecutorBase
+internal sealed partial class MouseClickExecutor : ClickExecutorBase
 {
     // WinAPI для перемещения мыши
-    [DllImport("user32.dll")]
-    private static extern bool SetCursorPos(int X, int Y);
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool SetCursorPos(int X, int Y);
 
     // WinAPI для клика мышью
-    [DllImport("user32.dll")]
-    private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
+    [LibraryImport("user32.dll")]
+    private static partial void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
 
     private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
     private const uint MOUSEEVENTF_LEFTUP = 0x0004;
