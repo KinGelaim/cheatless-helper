@@ -7,10 +7,15 @@ using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
+/// <summary>
+/// Поиск элемента (ресурса) на заданном изображении
+/// </summary>
+/// <param name="windowImage">Исходное (заданное) изображение</param>
 internal sealed class TemplateMatchingFinder(Bitmap windowImage) : IElementFinder, IDisposable
 {
     private readonly Mat _sourceMat = BitmapConverter.BitmapToMatNoAlpha(windowImage);
 
+    /// <inheritdoc/>
     public Point? FindElementBitmap(ResourceInfo resourceInfo)
     {
         // 1. Загружаем изображения

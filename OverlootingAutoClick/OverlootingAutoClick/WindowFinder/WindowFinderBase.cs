@@ -2,6 +2,9 @@ using System.Runtime.InteropServices;
 
 namespace OverlootingAutoClick.WindowFinder;
 
+/// <summary>
+/// Базовый класс для поиска окна Windows
+/// </summary>
 internal abstract class WindowFinderBase : IWindowFinder
 {
     [DllImport("user32.dll")]
@@ -15,5 +18,6 @@ internal abstract class WindowFinderBase : IWindowFinder
 
     protected delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
+    /// <inheritdoc/>
     public abstract IntPtr FindWindow();
 }

@@ -1,5 +1,8 @@
 namespace OverlootingAutoClick.WindowFinder;
 
+/// <summary>
+/// Поиск окна Windows по частичному совпадению имени процесса
+/// </summary>
 internal sealed class PartialTitleWindowFinder : WindowFinderBase
 {
     private readonly string _titlePart;
@@ -9,6 +12,7 @@ internal sealed class PartialTitleWindowFinder : WindowFinderBase
         _titlePart = titlePart;
     }
 
+    /// <inheritdoc/>
     public override IntPtr FindWindow()
     {
         var foundHWnd = IntPtr.Zero;

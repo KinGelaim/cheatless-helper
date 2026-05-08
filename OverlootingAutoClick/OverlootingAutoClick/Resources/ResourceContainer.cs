@@ -3,6 +3,9 @@ using Emgu.CV.CvEnum;
 
 namespace OverlootingAutoClick.Resources;
 
+/// <summary>
+/// Класс-хранилище для информации о ресурсах
+/// </summary>
 internal sealed class ResourceContainer : IDisposable
 {
     private readonly ResourceInfo[] _resources =

@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace OverlootingAutoClick.ElementFinder;
 
+/// <summary>
+/// Интерфейс для поиска элемента (ресурса)
+/// </summary>
 internal interface IElementFinder
 {
     /// <summary>

@@ -1,5 +1,8 @@
 namespace OverlootingAutoClick.WindowFinder;
 
+/// <summary>
+/// Поиск окна Windows по полному совпадению имени процесса
+/// </summary>
 internal sealed class ExactTitleWindowFinder : WindowFinderBase
 {
     private readonly string _title;
@@ -9,6 +12,7 @@ internal sealed class ExactTitleWindowFinder : WindowFinderBase
         _title = title;
     }
 
+    /// <inheritdoc/>
     public override IntPtr FindWindow()
     {
         var foundHWnd = IntPtr.Zero;

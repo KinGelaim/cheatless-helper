@@ -1,5 +1,8 @@
 namespace OverlootingAutoClick.WindowFinder;
 
+/// <summary>
+/// Поиск окна
+/// </summary>
 internal interface IWindowFinder
 {
     /// <summary>

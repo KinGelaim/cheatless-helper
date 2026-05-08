@@ -5,8 +5,16 @@ using System.Drawing.Imaging;
 
 namespace OverlootingAutoClick.Utils;
 
+/// <summary>
+/// Преобразователь изображений
+/// </summary>
 internal static class BitmapConverter
 {
+    /// <summary>
+    /// Конвертирует Bitmap изображение с Alpha каналом в Mat без Alpha канала
+    /// </summary>
+    /// <param name="bitmap">Исходное изображение</param>
+    /// <returns>Mat без Alpha канала</returns>
     public static Mat BitmapToMatNoAlpha(this Bitmap bitmap)
     {
         // Блокировка битов в формате 24bpp (BGR), чтобы игнорировать альфа канал

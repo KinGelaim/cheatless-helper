@@ -12,6 +12,7 @@ internal sealed class SendMessageExecutor : ClickExecutorBase
     private const uint WM_LBUTTONDOWN = 0x0201;
     private const uint WM_LBUTTONUP = 0x0202;
 
+    /// <inheritdoc/>
     public override void ClickAt(Point position, IntPtr hWnd)
     {
         // Перед отправкой клика желательно установить окно в активное или фокус

@@ -2,6 +2,9 @@ using System.Drawing;
 
 namespace OverlootingAutoClick.ClickExecutor;
 
+/// <summary>
+/// Интерфейс для выполнения кликов
+/// </summary>
 internal interface IClickExecutor
 {
     /// <summary>

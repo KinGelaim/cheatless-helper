@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace OverlootingAutoClick.WindowCapture;
 
+/// <summary>
+/// Захват изображения окна через Api windows
+/// </summary>
 internal sealed class WindowsApiCapture : IWindowCapture
 {
     [DllImport("user32.dll")]
@@ -20,6 +23,7 @@ internal sealed class WindowsApiCapture : IWindowCapture
         public int Bottom;
     }
 
+    /// <inheritdoc/>
     public Bitmap? CaptureWindow(IntPtr hWnd)
     {
         // Получить размер окна
