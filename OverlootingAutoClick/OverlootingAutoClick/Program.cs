@@ -1,0 +1,100 @@
+using Emgu.CV;
+using Emgu.CV.Structure;
+using OverlootingAutoClick.ClickExecutor;
+using OverlootingAutoClick.ElementFinder;
+using OverlootingAutoClick.Resources;
+using OverlootingAutoClick.WindowCapture;
+using OverlootingAutoClick.WindowFinder;
+using System.Diagnostics;
+using System.Drawing;
+
+namespace OverlootingAutoClick;
+
+internal sealed class Program
+{
+    private static volatile bool _shouldStop = false;
+
+    public static void Main()
+    {
+        Console.CancelKeyPress += (sender, e) =>
+        {
+            _shouldStop = true;
+            e.Cancel = true;
+            Console.WriteLine("Получена команда на завершение. Дожидаемся завершения цикла...");
+        };
+
+        Console.WriteLine("Для завершения нажмите Ctrl+C");
+
+        var stopwatch = new Stopwatch();
+        var resourceContainer = new ResourceContainer();
+        while (!_shouldStop)
+        {
+            stopwatch.Restart();
+            ScanResources(resourceContainer);
+            stopwatch.Stop();
+            Console.WriteLine($"Время сканирования ресурсов: {stopwatch.ElapsedMilliseconds}");
+
+            Thread.Sleep(1000);
+        }
+
+        Console.WriteLine("Программа завершена");
+    }
+
+    private static void ScanResources(ResourceContainer resourceContainer)
+    {
+        // Найти окно
+        var windowFinder = new ExactTitleWindowFinder("Overlooting");
+        var hWnd = windowFinder.FindWindow();
+        if (hWnd == IntPtr.Zero)
+        {
+            Console.WriteLine("Окно не найдено");
+            return;
+        }
+
+        // Захватить изображение
+        var capturer = new WindowsApiCapture();
+        using var bmp = capturer.CaptureWindow(hWnd);
+        if (bmp is null)
+        {
+            Console.WriteLine("Не удалось захватить изображение");
+            return;
+        }
+
+        // Проверяем, что не захватили переходное изображение
+        var img = bmp.ToImage<Bgr, byte>();
+        var averageColor = img.GetAverage();
+        if (averageColor.Blue < 1 && averageColor.Green < 1 && averageColor.Red < 1)
+        {
+            Console.WriteLine($"Захватили переходное изображение: {averageColor}");
+            return;
+        }
+
+        // Преобразование изображения
+        using var finder = new TemplateMatchingFinder(bmp);
+        bmp.Dispose();
+
+        // Поиск элементов по приоритетам
+        var points = new List<Point>();
+        Parallel.ForEach(
+            resourceContainer.GetResources(),
+            new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount / 3 },
+            resource =>
+            {
+                var elementPos = finder.FindElementBitmap(resource);
+
+                if (elementPos.HasValue)
+                {
+                    points.Add(elementPos.Value);
+                }
+            });
+        finder.Dispose();
+
+        // Осуществляем клики по найденным элементам
+        foreach (var point in points)
+        {
+            var clicker = new SendMessageExecutor();
+            clicker.ClickAt(point, hWnd);
+            Thread.Sleep(100);
+        }
+    }
+}
