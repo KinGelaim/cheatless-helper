@@ -24,17 +24,18 @@ internal sealed partial class Program
         while (!_shouldStop)
         {
             stopwatch.Restart();
-            ScanResources();
+            StartProcess();
             stopwatch.Stop();
-            Console.WriteLine($"Время сканирования ресурсов: {stopwatch.ElapsedMilliseconds}");
+            Console.WriteLine($"Время процесса: {stopwatch.ElapsedMilliseconds}");
 
             Thread.Sleep(60_000);
         }
 
         Console.WriteLine("Программа завершена");
+        Console.ReadKey();
     }
 
-    private static void ScanResources()
+    private static void StartProcess()
     {
         // Найти окно
         var hWnd = FindWindow("Timber Rush");
@@ -209,10 +210,10 @@ internal sealed partial class Program
 
     #region RecognizeText
 
-    private class TextBoundingBox
+    private sealed class TextBoundingBox
     {
-        public string Text { get; set; }
-        public Rectangle BoundingBox { get; set; }
+        public required string Text { get; set; }
+        public required Rectangle BoundingBox { get; set; }
     }
 
     private static List<TextBoundingBox> RecognizeTextAndBoundingBoxes(Bitmap img, string searchText)
@@ -259,15 +260,6 @@ internal sealed partial class Program
 
     #region ClickExecutor
 
-    // WinAPI для отправки сообщения в окно
-    [LibraryImport("user32.dll", EntryPoint = "SendMessageW")]
-    private static partial IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-    private const uint WM_LBUTTONDOWN = 0x0201;
-    private const uint WM_LBUTTONUP = 0x0202;
-
-
-
     // WinAPI для перемещения мыши
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -282,11 +274,6 @@ internal sealed partial class Program
 
     private static void ClickAt(Point position, IntPtr hWnd)
     {
-        //Console.WriteLine($"Отправляю клик по ({position.X}, {position.Y})...");
-        //SendMessage(hWnd, WM_LBUTTONDOWN, (IntPtr)1, MakeLParam(position.X, position.Y));
-        //Thread.SpinWait(50);
-        //SendMessage(hWnd, WM_LBUTTONUP, IntPtr.Zero, MakeLParam(position.X, position.Y));
-
         // Перед кликом необходимо установить окно в активное или фокус
         SetForegroundWindow(hWnd);
 
@@ -299,11 +286,6 @@ internal sealed partial class Program
         Thread.Sleep(50);
 
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    private static IntPtr MakeLParam(int x, int y)
-    {
-        return (IntPtr)((y << 16) | (x & 0xFFFF));
     }
 
     #endregion ClickExecutor
